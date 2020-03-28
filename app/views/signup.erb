@@ -6,9 +6,9 @@
   <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
   <div class="clear">
   </div>
-  <% if flash.has?(:message) %>
+  <h2 color="red"><% if flash.has?(:message) %>
     <%= flash[:message] %>
-  <% end %>
+  <% end %></h2>
 
 <form action="/signup" method="post">
   <h3>
