@@ -1,0 +1,23 @@
+<div class="content">
+
+  <h1>Instructor Login</h1>
+  <button class ="button" onclick="window.location.href='/instructors'">Instructors</button>
+  <button class ="button" onclick="window.location.href='/courses'">Courses</button>
+  <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
+  <div class="clear">
+  </div>
+
+<form action="/instructors/#{@instructor.slug}" method="post">
+  <h3>
+      <label for="username">Username: </label>
+      <input type="text" name="username" id="username">
+<br> <label for="password">Password: </label>
+      <input type="text" name="password" id="password">
+      <br>
+      <label for="submit"></label>
+      <input class="button" type="submit" value="Login">
+  </h3>
+
+</form>
+</p>
+</div>
