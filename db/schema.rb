@@ -14,12 +14,12 @@
 ActiveRecord::Schema.define(version: 20200325022647) do
 
   create_table "course_group", force: :cascade do |t|
-    t.string  "course_group_name"
+    t.string  "name"
     t.integer "creator_id"
   end
 
   create_table "courses", force: :cascade do |t|
-    t.string  "course_name"
+    t.string  "name"
     t.integer "course_length"
     t.string  "course_description"
     t.integer "creator_id"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20200325022647) do
   end
 
   create_table "instructors", force: :cascade do |t|
-    t.string "username"
+    t.string "name"
     t.string "email"
     t.string "password_digest"
     t.string "first_name"
