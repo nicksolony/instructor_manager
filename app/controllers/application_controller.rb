@@ -37,6 +37,12 @@ class ApplicationController < Sinatra::Base
         flash[:message] = "Please add valid email address"
       elsif @instructor.password_digest==nil
         flash[:message] = "Password can't be blank"
+      elsif
+        @instructor.first_name==""
+          flash[:message] = "First Name can't be blank"
+      elsif
+        @instructor.last_name==""
+          flash[:message] = "Last Name can't be blank"
       else
         flash[:message] = "Account with this username or email already exist"
       end

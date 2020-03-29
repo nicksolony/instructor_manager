@@ -10,4 +10,8 @@
 <%end%>
 <div class="clear">
 </div>
-text here
+<ol>
+  <% @instructors.each do |instructor| %>
+    <li><a href="/instructors/<%=instructor.slug%>"><%=instructor.last_name%>, <%=instructor.first_name%></a></li>
+    <%end%>
+</ol>
