@@ -39,7 +39,9 @@ class InstructorsController < ApplicationController
   end
 
   # GET: /instructors/5
-  get "/instructors/:id" do
+  get "/instructors/:slug" do
+    @instructor = Instructor.find_by_slug(params[:slug].to_s)
+    binding.pry
     erb :"/instructors/show.html"
   end
 

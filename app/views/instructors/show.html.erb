@@ -1,2 +1,53 @@
-<h1>This is the show page for an individual instance of your model.</h1>
-<a href="/logout">Log Out</a>
+<h1><%=@instructor.first_name%> <%=@instructor.last_name%> Profile</h1>
+<button class ="button" onclick="window.location.href='/'">Home</button>
+<button class ="button" onclick="window.location.href='/instructors'">Instructors</button>
+<button class ="button" onclick="window.location.href='/courses'">Courses</button>
+<button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
+<%if Helpers.logged_in?(session)%>
+<button class ="button" onclick="window.location.href='/logout'">Log Out</button>
+<%else%>
+<button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
+<button class ="button" onclick="window.location.href='/signup'">Instructor Signup</button>
+<%end%>
+
+<div class="clear">
+</div>
+<h2>Profile Overview</h2>
+<table>
+  <tr>
+    <td>Username:</td>
+    <td><%=@instructor.name%></td>
+  </tr>
+  <tr>
+    <td>First Name:</td>
+    <td><%=@instructor.first_name%></td>
+  </tr>
+  <tr>
+    <td>Last Name:</td>
+    <td><%=@instructor.last_name%></td>
+  </tr>
+  <tr>
+    <td>Email:</td>
+    <td><%=@instructor.email%></td>
+  </tr>
+  <tr>
+    <td>Phone:</td>
+    <td><%=@instructor.phone%></td>
+  </tr>
+</table>
+<table width="100%">
+  <tr>
+    <td width="50%"><h3>Instructor Course Groups</h3></td>
+    <td width="50%"><h3>Instructor Courses</h3></td>
+  </tr>
+  <tr>
+    <td width="50%"><ul>
+        <%@instructor.course_groups.each do |course_group|%>
+        <li><a href="/course_groups/<%=course_group.slug%>"><%=course_group.name%></a></li>
+        <%end%>
+    </ul></td>
+    <td width="50%"><%@instructor.courses.each do |course|%>
+    <li><a href="/courses/<%=course.slug%>"><%=course.name%></a></li>
+    <%end%></td>
+  </tr>
+</table>

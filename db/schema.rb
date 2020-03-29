@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20200325022647) do
 
-  create_table "course_group", force: :cascade do |t|
+  create_table "course_groups", force: :cascade do |t|
     t.string  "name"
     t.integer "creator_id"
   end
