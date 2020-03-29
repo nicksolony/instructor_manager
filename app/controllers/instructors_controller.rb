@@ -9,6 +9,8 @@ class InstructorsController < ApplicationController
 
   # GET: /instructors/new
   get "/instructors/new" do
+    @courses= Course.all.sort_by(&:name)
+    @course_groups=CourseGroup.all.uniq.sort_by(&:name)
     erb :"/instructors/new.html"
   end
 
@@ -34,6 +36,8 @@ class InstructorsController < ApplicationController
         else
           flash[:message] = "Account with this username or email already exist"
         end
+        binding.pry
+
         redirect to '/instructors/new'
       end
   end
@@ -45,7 +49,8 @@ class InstructorsController < ApplicationController
   end
 
   # GET: /instructors/5/edit
-  get "/instructors/:id/edit" do
+  get "/instructors/:slug/edit" do
+    @instructor = Instructor.find_by_slug(params[:slug].to_s)
     erb :"/instructors/edit.html"
   end
 
