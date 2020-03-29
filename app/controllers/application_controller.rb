@@ -21,35 +21,9 @@ class ApplicationController < Sinatra::Base
     if Helpers.logged_in?(session)
       redirect to "/instructors/#{Helpers.current_user(session).slug}"
     else
-      erb :signup
+      redirect to "/instructors/new"
     end
   end
-
-  post '/signup' do
-    @instructor=Instructor.new(params)
-    if EmailAddress.valid?(params[:email]) && @instructor.save
-      session[:user_id] = @instructor.id
-      redirect to "/instructors/#{Helpers.current_user(session).slug}"
-    else
-      if @instructor.name==""
-        flash[:message] = "Username can't be blank"
-      elsif !EmailAddress.valid?(@instructor.email)
-        flash[:message] = "Please add valid email address"
-      elsif @instructor.password_digest==nil
-        flash[:message] = "Password can't be blank"
-      elsif
-        @instructor.first_name==""
-          flash[:message] = "First Name can't be blank"
-      elsif
-        @instructor.last_name==""
-          flash[:message] = "Last Name can't be blank"
-      else
-        flash[:message] = "Account with this username or email already exist"
-      end
-      redirect to '/signup'
-    end
-  end
-
 
   get '/login' do
     if Helpers.logged_in?(session)

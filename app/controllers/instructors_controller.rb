@@ -14,7 +14,28 @@ class InstructorsController < ApplicationController
 
   # POST: /instructors
   post "/instructors" do
-    redirect "/instructors"
+      @instructor=Instructor.new(params)
+      if EmailAddress.valid?(params[:email]) && @instructor.save
+        session[:user_id] = @instructor.id
+        redirect to "/instructors/#{Helpers.current_user(session).slug}"
+      else
+        if @instructor.name==""
+          flash[:message] = "Username can't be blank"
+        elsif !EmailAddress.valid?(@instructor.email)
+          flash[:message] = "Please add valid email address"
+        elsif @instructor.password_digest==nil
+          flash[:message] = "Password can't be blank"
+        elsif
+          @instructor.first_name==""
+            flash[:message] = "First Name can't be blank"
+        elsif
+          @instructor.last_name==""
+            flash[:message] = "Last Name can't be blank"
+        else
+          flash[:message] = "Account with this username or email already exist"
+        end
+        redirect to '/instructors/new'
+      end
   end
 
   # GET: /instructors/5
