@@ -1,7 +1,9 @@
 class InstructorsController < ApplicationController
 
+
   # GET: /instructors
   get "/instructors" do
+    @instructors=Instructor.all.sort_by(&:last_name)
     erb :"/instructors/index.html"
   end
 
@@ -35,5 +37,5 @@ class InstructorsController < ApplicationController
     redirect "/instructors"
   end
 
-  
+
 end

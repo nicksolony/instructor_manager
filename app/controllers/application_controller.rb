@@ -14,16 +14,12 @@ class ApplicationController < Sinatra::Base
 
 
   get "/" do
-    if Helpers.logged_in?(session)
-      redirect '/instructors'
-    else
-      erb :welcome
-    end
+    erb :welcome
   end
 
   get '/signup' do
     if Helpers.logged_in?(session)
-      redirect to '/instructors'
+      redirect to "/instructors/#{Helpers.current_user(session).slug}"
     else
       erb :signup
     end
@@ -33,7 +29,7 @@ class ApplicationController < Sinatra::Base
     @instructor=Instructor.new(params)
     if EmailAddress.valid?(params[:email]) && @instructor.save
       session[:user_id] = @instructor.id
-      redirect to '/instructors'
+      redirect to "/instructors/#{Helpers.current_user(session).slug}"
     else
       if @instructor.name==""
         flash[:message] = "Username can't be blank"
@@ -51,7 +47,7 @@ class ApplicationController < Sinatra::Base
 
   get '/login' do
     if Helpers.logged_in?(session)
-      redirect to '/instructors'
+      redirect to "/instructors/#{Helpers.current_user(session).slug}"
     else
       erb :login
     end
@@ -61,7 +57,7 @@ class ApplicationController < Sinatra::Base
     @instructor = Instructor.find_by(name: params[:name])
     if @instructor && @instructor.authenticate(params[:password])
       session[:user_id] = @instructor.id
-      redirect to '/instructors'
+      redirect to "/instructors/#{Helpers.current_user(session).slug}"
     else
       flash[:message] = "Username or Password didn't match"
       redirect to '/login'
