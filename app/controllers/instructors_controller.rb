@@ -34,4 +34,6 @@ class InstructorsController < ApplicationController
   delete "/instructors/:id/delete" do
     redirect "/instructors"
   end
+
+  
 end

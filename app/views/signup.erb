@@ -4,10 +4,11 @@
   <button class ="button" onclick="window.location.href='/instructors'">Instructors</button>
   <button class ="button" onclick="window.location.href='/courses'">Courses</button>
   <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
+  <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
   <div class="clear">
   </div>
   <h2><% if flash.has?(:message) %>
-    <%= flash[:message] %>
+    <%= flash[:message]%>
   <% end %></h2>
 
 <form action="/signup" method="post">
@@ -40,7 +41,7 @@
       <tr>
 
       <td><label for="submit"></label></td>
-      <td><input class="button" type="submit" value="Login"></td>
+      <td><input class="button" type="submit" value="Signup"></td>
       </tr>
       </table>
   </h3>
