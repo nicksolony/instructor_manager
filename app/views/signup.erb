@@ -6,7 +6,7 @@
   <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
   <div class="clear">
   </div>
-  <h2 color="red"><% if flash.has?(:message) %>
+  <h2><% if flash.has?(:message) %>
     <%= flash[:message] %>
   <% end %></h2>
 

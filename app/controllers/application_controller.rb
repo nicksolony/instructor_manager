@@ -12,6 +12,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/" do
+    flash[:message]=nil
     erb :welcome
   end
 
@@ -20,20 +21,28 @@ class ApplicationController < Sinatra::Base
   end
 
   post '/signup' do
-    #binding.pry
-    @user=Instructor.new(params)
-    if EmailAddress.valid?(params[:email]) && @user.save
+    @instructor=Instructor.new(params)
+    if EmailAddress.valid?(params[:email]) && @instructor.save
       session[:user_id] = @user.id
       redirect to '/instructors'
     else
-      flash[:message] = "Please make sure you enter username, valid email and password!"
+      if @instructor.name==""
+        flash[:message] = "Username can't be blank"
+      elsif !EmailAddress.valid?(@instructor.email)
+        flash[:message] = "Please add valid email address"
+      elsif @instructor.password_digest==nil
+        flash[:message] = "Password can't be blank"
+      else
+        flash[:message] = "Account with this username or email already exist"
+      end
       redirect to '/signup'
     end
   end
+
+
   get '/login' do
     erb :login
   end
-
 
 
 
