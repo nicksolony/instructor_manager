@@ -16,9 +16,19 @@ class InstructorsController < ApplicationController
 
   # POST: /instructors
   post "/instructors" do
-      @instructor=Instructor.new(params)
-      if EmailAddress.valid?(params[:email]) && @instructor.save
+    @instructor=Instructor.new(params[:instructor])
+      if EmailAddress.valid?(@instructor.email) && @instructor.save
         session[:user_id] = @instructor.id
+        if !params[:course][:name].empty?
+          @course = Course.new(params[:course])
+          if !params[:course_group_name].empty?
+            new_course_group = CourseGroup.create(name: params[:course_group_name], creator_id: @instructor.id)
+            @course.course_group_id = new_course_group.id
+          end
+          @course.instructors << @instructor
+          @course.creator_id=@instructor.id
+          @course.save
+        end
         redirect to "/instructors/#{Helpers.current_user(session).slug}"
       else
         if @instructor.name==""
@@ -36,8 +46,6 @@ class InstructorsController < ApplicationController
         else
           flash[:message] = "Account with this username or email already exist"
         end
-        binding.pry
-
         redirect to '/instructors/new'
       end
   end
