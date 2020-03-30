@@ -3,6 +3,9 @@ class InstructorsController < ApplicationController
 
   # GET: /instructors
   get "/instructors" do
+    if Helpers.logged_in?(session)
+      @instructor= Helpers.current_user(session)
+    end
     @instructors=Instructor.all.sort_by(&:last_name)
     erb :"/instructors/index.html"
   end
@@ -52,8 +55,8 @@ class InstructorsController < ApplicationController
 
   # GET: /instructors/5
   get "/instructors/:slug" do
-    @instructor = Instructor.find_by_slug(params[:slug].to_s)
-    erb :"/instructors/show.html"
+      @instructor = Instructor.find_by_slug(params[:slug].to_s)
+      erb :"/instructors/show.html"
   end
 
   # GET: /instructors/5/edit

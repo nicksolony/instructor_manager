@@ -1,8 +1,9 @@
-<h1>Our Instructors</h1>
+<h1>Instructors</h1>
 <button class ="button" onclick="window.location.href='/'">Home</button>
 <button class ="button" onclick="window.location.href='/courses'">Courses</button>
 <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
 <%if Helpers.logged_in?(session)%>
+<button class ="button" onclick="window.location.href='/instructors/<%=@instructor.slug%>'">Profile</button>
 <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
 <%else%>
 <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
@@ -12,6 +13,11 @@
 </div>
 <ol>
   <% @instructors.each do |instructor| %>
-    <li><a href="/instructors/<%=instructor.slug%>"><%=instructor.last_name%>, <%=instructor.first_name%></a></li>
+    <li>
+      <a href="/instructors/<%=instructor.slug%>"><%=instructor.last_name%>, <%=instructor.first_name%></a>
+      <% if instructor==@instructor%>
+      - <strong>&#9734</strong>
+      <%end%>
+    </li>
     <%end%>
 </ol>

@@ -4,7 +4,11 @@
 <button class ="button" onclick="window.location.href='/courses'">Courses</button>
 <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
 <%if Helpers.logged_in?(session)%>
-<button class ="button" onclick="window.location.href='/instructors/<%=@instructor.slug%>/edit'">Edit Profile</button>
+  <%if @instructor == Helpers.current_user(session)%>
+    <button class ="button" onclick="window.location.href='/instructors/<%=@instructor.slug%>/edit'">Edit Profile</button>
+  <%else%>
+    <button class ="button" onclick="window.location.href='/instructors/<%=Helpers.current_user(session).slug%>'">Profile</button>
+  <%end%>
 <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
 <%else%>
 <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
@@ -39,13 +43,18 @@
 <table width="100%">
   <tr>
     <td width="50%"><h2>Instructor Course Groups</h3></td>
-    <td width="50%"><h2>Instructor Courses</h3></td>
+    <td width="50%"><h2>Instructor Courses
+      <%if Helpers.logged_in?(session) && @instructor == Helpers.current_user(session)%>
+        - <a href="/courses/new">Add new course</a>
+        <%end%>
+      </h3>
+    </td>
   </tr>
   <tr>
     <td width="50%"><ul>
         <%@instructor.course_groups.uniq.each do |course_group|%>
         <li><a href="/course_groups/<%=course_group.slug%>"><%=course_group.name%></a>
-          <% if course_group.creator_id == @instructor.id && Helpers.logged_in?(session)%> -
+          <% if Helpers.logged_in?(session) && course_group.creator_id == Helpers.current_user(session).id  && @instructor == Helpers.current_user(session)%> -
            <a href="/course_groups/<%=course_group.slug%>/edit">Edit</a>
            <%end%>
         </li>
@@ -54,7 +63,7 @@
     <td width="50%">
       <%@instructor.courses.each do |course|%>
         <li><a href="/courses/<%=course.slug%>"><%=course.name%></a>
-          <% if course.creator_id == @instructor.id && Helpers.logged_in?(session)%> -
+          <% if Helpers.logged_in?(session) && course.creator_id == Helpers.current_user(session).id && @instructor == Helpers.current_user(session)%> -
            <a href="/courses/<%=course.slug%>/edit">Edit</a>
            <%end%>
          </li>

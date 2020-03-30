@@ -14,12 +14,16 @@ class ApplicationController < Sinatra::Base
 
 
   get "/" do
+    if Helpers.logged_in?(session)
+      @instructor= Helpers.current_user(session)
+    end
     erb :welcome
   end
 
   get '/signup' do
     if Helpers.logged_in?(session)
-      redirect to "/instructors/#{Helpers.current_user(session).slug}"
+      @instructor= Helpers.current_user(session)
+      redirect to "/instructors/#{@instructor.slug}"
     else
       redirect to "/instructors/new"
     end
@@ -27,7 +31,8 @@ class ApplicationController < Sinatra::Base
 
   get '/login' do
     if Helpers.logged_in?(session)
-      redirect to "/instructors/#{Helpers.current_user(session).slug}"
+      @instructor= Helpers.current_user(session)
+      redirect to "/instructors/#{@instructor.slug}"
     else
       erb :login
     end
