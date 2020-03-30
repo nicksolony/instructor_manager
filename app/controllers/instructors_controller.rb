@@ -61,18 +61,30 @@ class InstructorsController < ApplicationController
 
   # GET: /instructors/5/edit
   get "/instructors/:slug/edit" do
-    @instructor = Instructor.find_by_slug(params[:slug].to_s)
-    erb :"/instructors/edit.html"
+    if Helpers.logged_in?(session)
+      @instructor = Instructor.find_by_slug(params[:slug].to_s)
+      @courses = Course.all.sort_by(&:name)
+      erb :"/instructors/edit.html"
+    else
+      redirect to "/instructors/#{params[:slug]}"
+    end
   end
 
   # PATCH: /instructors/5
-  patch "/instructors/:id" do
-    redirect "/instructors/:id"
+  patch "/instructors/:slug" do
+    @instructor = Instructor.find_by_slug(params[:slug])
+     if  @instructor.update(params[:instructor])
+       redirect "/instructors/#{@instructor.slug}"
+     else
+       redirect "/instructors/#{@instructor.slug}/edit"
+     end
   end
 
   # DELETE: /instructors/5/delete
-  delete "/instructors/:id/delete" do
-    redirect "/instructors"
+  delete "/instructors/:slug/delete" do
+    @instructor = Instructor.find_by_slug(params[:slug].to_s)
+    @instructor.delete
+    redirect "/logout"
   end
 
 

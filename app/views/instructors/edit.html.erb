@@ -5,87 +5,67 @@
   <button class ="button" onclick="window.location.href='/instructors'">Instructors</button>
   <button class ="button" onclick="window.location.href='/courses'">Courses</button>
   <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
+  <%if Helpers.logged_in?(session)%>
+
+      <button class ="button" onclick="window.location.href='/instructors/<%=Helpers.current_user(session).slug%>'">Profile</button>
+
+  <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
+  <%else%>
   <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
+  <button class ="button" onclick="window.location.href='/signup'">Instructor Signup</button>
+  <%end%>
+
   <div class="clear">
   </div>
-  <h2><% if flash.has?(:message) %>
-    <%= flash[:message]%>
-  <% end %></h2>
 
-<form action="/instructors" method="post">
-  <h3>
-    <table>
-      <tr>
-        <td><label for="name">Username: </label></td>
-        <td><input type="text" name="instructor[name]" id="name"></td>
-      </tr>
-      <tr>
-        <td><label for="email">Email: </label></td>
-        <td><input type="text" name="instructor[email]" id="email"></td>
-      </tr>
-      <tr>
-        <td><label for="password">Password: </label></td>
-        <td><input type="text" name="instructor[password]" id="password"></td>
-      </tr>
-      <tr>
-        <td><label for="first_name">First Name: </label></td>
-          <td><input type="text" name="instructor[first_name]" id="first_name"></td>
-      </tr>
-      <tr>
-       <td><label for="last_name">Last Name: </label></td>
-       <td><input type="text" name="instructor[last_name]" id="last_name"></td>
-      </tr>
-      <tr>
-        <td><label for="phone">Phone: </label></td>
-        <td><input type="text" name="instructor[phone]" id="phone"></td>
-      </tr>
-      </table>
-  </h3>
-  <p><strong>Please note:</strong> Username, email, password, First Name and Last Name are required fields.</p>
-  <h2>Add Instructor Courses</h2>
-<table>
-  <% @courses.each do |course|%>
-  <tr>
-  <td><label for="<%=course.slug%>"><%=course.name%></label></td>
-  <td><input type="checkbox" name="instructor[course_ids][]" value="<%=course.id%>" id="<%=course.slug%>"></td>
-  <%end%>
-  </tr>
-  </table>
-  <h2>Add new course</h2>
+
+
+  <form action="/instructors/<%=@instructor.slug%>" method="POST">
+    <input type="hidden" name="_method" value="patch">
+    <h3>
+      <table>
+        <tr>
+          <td><label for="name">Username: </label></td>
+          <td><input type="text" name="instructor[name]" id="name" value = "<%=@instructor.name%>"></td>
+        </tr>
+        <tr>
+          <td><label for="email">Email: </label></td>
+          <td><input type="text" name="instructor[email]" id="email" value = "<%=@instructor.email%>"></td>
+        </tr>
+        <tr>
+          <td><label for="password">Password: </label></td>
+          <td><input type="text" name="instructor[password]" id="password" value = "<%=@instructor.password%>"> Enter if you want to change password</td>
+        </tr>
+        <tr>
+          <td><label for="first_name">First Name: </label></td>
+            <td><input type="text" name="instructor[first_name]" id="first_name" value = "<%=@instructor.first_name%>"></td>
+        </tr>
+        <tr>
+         <td><label for="last_name">Last Name: </label></td>
+         <td><input type="text" name="instructor[last_name]" id="last_name" value = "<%=@instructor.last_name%>"></td>
+        </tr>
+        <tr>
+          <td><label for="phone">Phone: </label></td>
+          <td><input type="text" name="instructor[phone]" id="phone" value = "<%=@instructor.phone%>"></td>
+        </tr>
+        </table>
+    </h3>
+    <p><strong>Please note:</strong> Username, email, password, First Name and Last Name are required fields.</p>
+    <h2>Edit Instructor Courses</h2>
   <table>
+    <% @courses.each do |course|%>
     <tr>
-      <td><label for="course_name">Course Name: </label></td>
-      <td><input type="text" name="course[name]" id="course_name"></td>
+    <td><label for="<%=course.slug%>"><%=course.name%></label></td>
+    <td><input type="checkbox" name="instructor[course_ids][]" value="<%=course.id%>" id="<%=course.slug%>" <%='checked' if @instructor.courses.include?(course)%>></td>
+    <%end%>
     </tr>
-    <tr>
-      <td><label for="course_length">Course Length: </label></td>
-      <td><input type="integer" name="course[course_length]" id="course_length"></td>
-    </tr>
-    <tr>
-      <td><label for="course_description">Course Description: </label></td>
-      <td><textarea rows="3" cols="30" name="course[course_description]" id="course_description"></textarea></td>
-    </tr>
-    <tr>
-      <td><label for="course_group_id">Course Group: </label></td>
-      <td>
-          <% @course_groups.each do |course_group| %>
-            <label for="<%=course_group.slug%>"><%=course_group.name%></label>
-                <input type="radio" name="course[course_group_id]" id="<%=course_group.slug%>" value ="<%=course_group.id%>">
-                <br>
-          <%end%>
-      </td>
-    </tr>
-    <tr>
-      <td><label for="course_group_name">New Course Group</label>
-      </td>
-      <td><input type="text" name="course_group_name" id="course_group_name"></td>
-    </tr>
-  </table>
+    </table>
 
-  <label for="signup"></label>
-  <input class="button" type="submit" value="Sign Up" id ="signup">
-  <br>
-</form>
-
-
-</div>
+    <label for="update"></label>
+    <input class="button" type="submit" value="Update" id ="update">
+    </form>
+    <form action="/instructors/<%=@instructor.slug%>/delete" method="post">
+      <input type="hidden" name="_method" value="DELETE">
+      <input class = "button" type="submit" value="Delete">
+  </form>
+  </div>
