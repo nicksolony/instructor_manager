@@ -4,6 +4,7 @@
 <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
 <%if Helpers.logged_in?(session)%>
 <button class ="button" onclick="window.location.href='/instructors/<%=@instructor.slug%>'">Profile</button>
+<button class ="button" onclick="window.location.href='/courses/new' ">New Course</button>
 <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
 <%else%>
 <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
