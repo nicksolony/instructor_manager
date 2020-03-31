@@ -45,8 +45,11 @@ class CoursesController < ApplicationController
 
 
   # GET: /courses/5
-  get "/courses/:id" do
-    erb :"/courses/show.html"
+  get "/courses/:slug" do
+      @course = Course.find_by_slug(params[:slug].to_s)
+      @course_creator = Instructor.find(@course.creator_id)
+      @instructors= @course.instructors.sort_by{|t| [t.last_name, t.first_name]}
+      erb :"/courses/show.html"
   end
 
   # GET: /courses/5/edit

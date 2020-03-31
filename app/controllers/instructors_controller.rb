@@ -83,8 +83,13 @@ class InstructorsController < ApplicationController
   # DELETE: /instructors/5/delete
   delete "/instructors/:slug/delete" do
     @instructor = Instructor.find_by_slug(params[:slug].to_s)
+    if !Course.any? { |e| e.creator_id==@instructor.id }
     @instructor.delete
     redirect "/logout"
+    else
+      flash[:message] = "Can't delete Instructor, need to delete courses first"
+      redirect "/instructors/#{@instructor.slug}"
+    end
   end
 
 

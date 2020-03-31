@@ -1,1 +1,57 @@
-<h1>This is the show page for an individual instance of your model.</h1>
+<h1><%=@course.name%></h1>
+<button class ="button" onclick="window.location.href='/'">Home</button>
+<button class ="button" onclick="window.location.href='/instructors'">Instructors</button>
+<button class ="button" onclick="window.location.href='/courses'">Courses</button>
+<button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
+<%if Helpers.logged_in?(session)%>
+  <%if @course.creator_id == Helpers.current_user(session).id%>
+    <button class ="button" onclick="window.location.href='/courses/<%=@course.slug%>/edit'">Edit Course</button>
+  <%end%>
+  <button class ="button" onclick="window.location.href='/instructors/<%=Helpers.current_user(session).slug%>'">Profile</button>
+  <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
+<%else%>
+  <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
+  <button class ="button" onclick="window.location.href='/signup'">Instructor Signup</button>
+<%end%>
+
+<div class="clear">
+</div>
+<
+<h2>Course Overview</h2>
+<table>
+  <tr>
+    <td>Course Name:</td>
+    <td><%=@course.name%></td>
+  </tr>
+  <tr>
+    <td>Course Group:</td>
+    <td><a href="/course_groups/<%=@course.course_group.slug%>"><%=@course.course_group.name%></a></td>
+  </tr>
+  <tr>
+    <td>Course Length:</td>
+    <td><%=@course.course_length%></td>
+  </tr>
+  <tr>
+    <td>Course Description:</td>
+    <td><%=@course.course_description%></td>
+  </tr>
+  <tr>
+    <td>Course Creator:</td>
+    <td><a href="/instructors/<%=@course_creator.slug%>"><%=@course_creator.first_name%> <%=@course_creator.last_name%></a></td>
+  </tr>
+  <tr>
+    <td><h3>Instructors</h3></td>
+  </tr>
+  <tr>
+    <td>
+      <%@course.instructors.each do |instructor|%>
+        <li><a href="/instructors/<%=instructor.slug%>"><%=instructor.last_name%>, <%=instructor.first_name%></a>
+          <% if @course_creator.id == Helpers.current_user(session).id && instructor == Helpers.current_user(session)%> -
+           <a href="/instructors/<%=instructor.slug%>/edit">Edit</a>
+           <%end%>
+         </li>
+
+      <%end%>
+    </td>
+  </tr>
+</table>

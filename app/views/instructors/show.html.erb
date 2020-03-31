@@ -17,6 +17,9 @@
 
 <div class="clear">
 </div>
+<% if flash.has?(:message) %>
+<h2>  <%= flash[:message]%></h2>
+<% end %>
 <h2>Profile Overview</h2>
 <table>
   <tr>
