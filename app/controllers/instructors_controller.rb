@@ -61,8 +61,8 @@ class InstructorsController < ApplicationController
 
   # GET: /instructors/5/edit
   get "/instructors/:slug/edit" do
-    if Helpers.logged_in?(session)
-      @instructor = Instructor.find_by_slug(params[:slug].to_s)
+    @instructor = Instructor.find_by_slug(params[:slug].to_s)
+    if Helpers.current_user(session) == @instructor
       @courses = Course.all.sort_by(&:name)
       erb :"/instructors/edit.html"
     else

@@ -2,8 +2,15 @@ class CoursesController < ApplicationController
 
   # GET: /courses
   get "/courses" do
+    if Helpers.logged_in?(session)
+      @instructor= Helpers.current_user(session)
+      @instructor_courses=Course.select{|course| course.instructors.include?(@instructor)}
+    end
+    #@courses=Course.all.sort_by(&:name)
+    @courses=Course.all.sort_by{|t| [t.course_group.name, t.name]}
     erb :"/courses/index.html"
   end
+
 
   # GET: /courses/new
   get "/courses/new" do

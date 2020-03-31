@@ -1,8 +1,9 @@
-<h1>This is Courses index page.</h1>
+<h1>Courses</h1>
+<button class ="button" onclick="window.location.href='/'">Home</button>
 <button class ="button" onclick="window.location.href='/instructors'">Instructors</button>
-<button class ="button" onclick="window.location.href='/courses'">Courses</button>
 <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
 <%if Helpers.logged_in?(session)%>
+<button class ="button" onclick="window.location.href='/instructors/<%=@instructor.slug%>'">Profile</button>
 <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
 <%else%>
 <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
@@ -10,3 +11,13 @@
 <%end%>
 <div class="clear">
 </div>
+<ol>
+  <% @courses.each do |course| %>
+    <li>
+      <a href="/course_groups/<%=course.course_group.slug%>"><%=course.course_group.name%> - <a href="/courses/<%=course.slug%>"><%=course.name%></a>
+      <% if @instructor_courses.include?(course)%>
+      - <strong>&#9734</strong>
+      <%end%>
+    </li>
+    <%end%>
+</ol>
