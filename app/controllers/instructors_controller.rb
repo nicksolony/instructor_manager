@@ -73,9 +73,22 @@ class InstructorsController < ApplicationController
   # PATCH: /instructors/5
   patch "/instructors/:slug" do
     @instructor = Instructor.find_by_slug(params[:slug])
-     if  @instructor.update(params[:instructor])
+     if  @instructor.update(params[:instructor]) && EmailAddress.valid?(@instructor.email)
        redirect "/instructors/#{@instructor.slug}"
      else
+       if @instructor.name==""
+         flash[:message] = "Username can't be blank"
+       elsif !EmailAddress.valid?(@instructor.email)
+         flash[:message] = "Please add valid email address"
+       elsif
+         @instructor.first_name==""
+           flash[:message] = "First Name can't be blank"
+       elsif
+         @instructor.last_name==""
+           flash[:message] = "Last Name can't be blank"
+       else
+         flash[:message] = "Account with this username or email already exist"
+       end
        redirect "/instructors/#{params[:slug]}/edit"
      end
   end

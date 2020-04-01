@@ -18,7 +18,9 @@
   <div class="clear">
   </div>
 
-
+  <h2><% if flash.has?(:message) %>
+    <%= flash[:message]%>
+  <% end %></h2>
 
   <form action="/instructors/<%=@instructor.slug%>" method="POST">
     <input type="hidden" name="_method" value="patch">
