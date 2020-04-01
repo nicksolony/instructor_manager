@@ -38,9 +38,9 @@ class CoursesController < ApplicationController
       elsif @course.name==""
           flash[:message] = "Course Name can't be blank"
       elsif CourseGroup.any? { |cg| cg.name==params[:course_group_name] }
-          flash[:message] = "Course Group with this name already exist"
+          flash[:message] = "Course Group with this name already exists"
       else
-          flash[:message] = "Course with this name already exist"
+          flash[:message] = "Course with this name already exists"
       end
         redirect to '/courses/new'
       end
@@ -81,7 +81,7 @@ class CoursesController < ApplicationController
 
          flash[:message] = "Course Name can't be blank"
      else
-         flash[:message] = "Course with this name already exist"
+         flash[:message] = "Course with this name already exists"
      end
        redirect "/courses/#{params[:slug]}/edit"
     end
