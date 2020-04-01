@@ -1,1 +1,37 @@
-<h1>Insert the form to create a new instance of your model.</h1>
+<div class="content">
+
+  <h1>Create New Course Group</h1>
+  <button class ="button" onclick="window.location.href='/'">Home</button>
+  <button class ="button" onclick="window.location.href='/instructors'">Instructors</button>
+  <button class ="button" onclick="window.location.href='/courses'">Courses</button>
+  <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
+  <%if Helpers.logged_in?(session)%>
+  <button class ="button" onclick="window.location.href='/instructors/<%=@instructor.slug%>'">Profile</button>
+  <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
+  <%else%>
+  <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
+  <button class ="button" onclick="window.location.href='/signup'">Instructor Signup</button>
+  <%end%>
+  <div class="clear">
+  </div>
+  <h2><% if flash.has?(:message) %>
+    <%= flash[:message]%>
+  <% end %></h2>
+
+<form action="/course_groups" method="post">
+
+    <table>
+      <tr>
+        <td><label for="name">Course Group Name: </label></td>
+        <td><input type="text" name="course_group[name]" id="name"></td>
+      </tr>
+    </table>
+
+
+  <label for="create_new_course_group"></label>
+  <input class="button" type="submit" value="Create New Course Group" id ="create_new_course_group">
+
+</form>
+
+
+</div>

@@ -11,13 +11,28 @@ class CourseGroupsController < ApplicationController
 
   # GET: /course_groups/new
   get "/course_groups/new" do
-    
-    erb :"/course_groups/new.html"
+    if Helpers.logged_in?(session)
+      @instructor= Helpers.current_user(session)
+      erb :"/course_groups/new.html"
+    else
+      redirect to '/course_groups'
+    end
+
   end
 
   # POST: /course_groups
   post "/course_groups" do
-    redirect "/course_groups"
+    @instructor= Helpers.current_user(session)
+    @course_group=CourseGroup.new(params[:course_group])
+    @course_group.creator_id = @instructor.id
+      if @course_group.save
+        redirect to "/course_groups/#{@course_group.slug}"
+      elsif @course_group.name==""
+          flash[:message] = "Course Group Name can't be blank"
+      else
+          flash[:message] = "Course Group with this name already exists"
+      end
+        redirect to '/course_groups/new'
   end
 
   # GET: /course_groups/5
