@@ -87,7 +87,9 @@ class CoursesController < ApplicationController
 
 
   # DELETE: /courses/5/delete
-  delete "/courses/:id/delete" do
+  delete "/courses/:slug/delete" do
+    @course = Course.find_by_slug(params[:slug].to_s)
+    @course.delete
     redirect "/courses"
   end
 end
