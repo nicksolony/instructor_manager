@@ -1,1 +1,103 @@
-<h1>This is the show page for an individual instance of your model.</h1>
+<h1><%=@course_group.name%></h1>
+<button class ="button" onclick="window.location.href='/'">Home</button>
+<button class ="button" onclick="window.location.href='/instructors'">Instructors</button>
+<button class ="button" onclick="window.location.href='/courses'">Courses</button>
+<button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
+<%if Helpers.logged_in?(session)%>
+  <%if @course_group_creator == Helpers.current_user(session)%>
+    <button class ="button" onclick="window.location.href='/course_groups/<%=@course_group.slug%>/edit'">Edit Course Group</button>
+    <form action="/course_groups/<%=@course_group.slug%>/delete" method="post">
+      <input type="hidden" name="_method" value="DELETE">
+      <input class = "button" type="submit" value="Delete Group">
+  </form>
+  <%end%>
+  <button class ="button" onclick="window.location.href='/instructors/<%=Helpers.current_user(session).slug%>'">Profile</button>
+  <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
+<%else%>
+  <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
+  <button class ="button" onclick="window.location.href='/signup'">Instructor Signup</button>
+<%end%>
+
+<div class="clear">
+</div>
+
+<h2>Course Group Overview</h2>
+<table>
+  <tr>
+    <td>Course Group Name:</td>
+    <td><%=@course_group.name%></td>
+  </tr>
+  <tr>
+    <td>Number of Courses in the group:</td>
+    <td><%=@course_group.courses.count%></td>
+  </tr>
+  <tr>
+    <td>Course Creator:</td>
+    <td><a href="/instructors/<%=@course_group_creator.slug%>"><%=@course_group_creator.first_name%> <%=@course_group_creator.last_name%></a></td>
+  </tr>
+
+  </table>
+  <table width="100%">
+    <tr>
+      <td width="50%"><h2>Instructors</h2></td>
+      <td width="50%">
+        <table>
+        <tr>
+          <td width="50%">
+
+        <h2>Courses</h2>
+          </td>
+        <%if Helpers.logged_in?(session) && @instructor == Helpers.current_user(session)%>
+           <td width="25%"><button class ="button" onclick="window.location.href='/courses/new'">Add new course</button></td>
+          <td width="25%">
+            <form action="/instructors/<%=@instructor.slug%>/delete_all_courses" method="post">
+              <input type="hidden" name="_method" value="DELETE">
+              <input class="button" type="submit" value="Delete all">
+          </form>
+          </td>
+          <%end%>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td width="50%"><ul>
+        <table>
+          <%@instructor.course_groups.uniq.sort_by(&:name).each do |course_group|%>
+          <tr><td width="70%"><a href="/course_groups/<%=course_group.slug%>"><%=course_group.name%></a></td>
+            <% if Helpers.logged_in?(session) && course_group.creator_id == Helpers.current_user(session).id  && @instructor == Helpers.current_user(session)%>
+            <td width="15%">
+              <button onclick="window.location.href='/course_groups/<%=course_group.slug%>/edit'">Edit</button>
+            </td>
+            <td width="15%">
+              <form action="/course_groups/<%=course_group.slug%>/delete" method="post">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="submit" value="Delete">
+            </form>
+              </td>
+             </tr>
+             <%end%>
+          <%end%>
+          </table>
+      </td>
+      <td width="50%">
+        <table>
+        <%@instructor.courses.sort_by(&:name).each do |course|%>
+          <tr><td width="70%"><a href="/courses/<%=course.slug%>"><%=course.name%></a></td>
+            <% if Helpers.logged_in?(session) && course.creator_id == Helpers.current_user(session).id && @instructor == Helpers.current_user(session)%>
+            <td width="15%">
+              <button onclick="window.location.href='/courses/<%=course.slug%>/edit'">Edit</button>
+            </td>
+             <td width="15%">
+               <form action="/courses/<%=course.slug%>/delete" method="post">
+                 <input type="hidden" name="_method" value="DELETE">
+                 <input type="submit" value="Delete">
+             </form>
+               </td>
+             </tr>
+             <%end%>
+          <%end%>
+        </table>
+      </td>
+    </tr>
+  </table>

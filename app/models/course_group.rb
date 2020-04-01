@@ -6,6 +6,6 @@ class CourseGroup < ActiveRecord::Base
 
   has_many :courses
   belongs_to :instructor
-  has_many :instructors, through: :instructor_courses
+  has_many :instructors, through: :courses
 
 end
