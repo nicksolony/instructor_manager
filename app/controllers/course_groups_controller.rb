@@ -2,11 +2,16 @@ class CourseGroupsController < ApplicationController
 
   # GET: /course_groups
   get "/course_groups" do
+    if Helpers.logged_in?(session)
+      @instructor= Helpers.current_user(session)
+    end
+    @course_groups=CourseGroup.all.sort_by(&:name)
     erb :"/course_groups/index.html"
   end
 
   # GET: /course_groups/new
   get "/course_groups/new" do
+    
     erb :"/course_groups/new.html"
   end
 
