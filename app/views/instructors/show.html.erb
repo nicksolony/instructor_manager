@@ -6,6 +6,10 @@
 <%if Helpers.logged_in?(session)%>
   <%if @instructor == Helpers.current_user(session)%>
     <button class ="button" onclick="window.location.href='/instructors/<%=@instructor.slug%>/edit'">Edit Profile</button>
+    <form action="/instructors/<%=@instructor.slug%>/delete" method="post">
+      <input type="hidden" name="_method" value="DELETE">
+      <input class = "button" type="submit" value="Delete Instructor">
+  </form>
   <%else%>
     <button class ="button" onclick="window.location.href='/instructors/<%=Helpers.current_user(session).slug%>'">Profile</button>
   <%end%>

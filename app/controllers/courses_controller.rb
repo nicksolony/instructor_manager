@@ -53,8 +53,16 @@ class CoursesController < ApplicationController
   end
 
   # GET: /courses/5/edit
-  get "/courses/:id/edit" do
-    erb :"/courses/edit.html"
+  get "/courses/:slug/edit" do
+    @course = Course.find_by_slug(params[:slug].to_s)
+    @course_creator = Instructor.find(@course.creator_id)
+    @instructors= @course.instructors.sort_by{|t| [t.last_name, t.first_name]}
+    @course_groups=CourseGroup.all.sort_by(&:name)
+    if Helpers.current_user(session) == @course_creator
+      erb :"/courses/edit.html"
+    else
+      redirect to "/instructors/#{params[:slug]}"
+    end
   end
 
   # PATCH: /courses/5

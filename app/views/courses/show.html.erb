@@ -6,6 +6,10 @@
 <%if Helpers.logged_in?(session)%>
   <%if @course.creator_id == Helpers.current_user(session).id%>
     <button class ="button" onclick="window.location.href='/courses/<%=@course.slug%>/edit'">Edit Course</button>
+    <form action="/courses/<%=@course.slug%>/delete" method="post">
+      <input type="hidden" name="_method" value="DELETE">
+      <input class = "button" type="submit" value="Delete Course">
+  </form>
   <%end%>
   <button class ="button" onclick="window.location.href='/instructors/<%=Helpers.current_user(session).slug%>'">Profile</button>
   <button class ="button" onclick="window.location.href='/logout'">Log Out</button>

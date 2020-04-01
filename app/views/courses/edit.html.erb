@@ -1,1 +1,67 @@
-<h1>Insert the form to edit an instance of your model here.</h1>
+<div class="content">
+
+  <h1>Edit Course</h1>
+  <button class ="button" onclick="window.location.href='/'">Home</button>
+  <button class ="button" onclick="window.location.href='/instructors'">Instructors</button>
+  <button class ="button" onclick="window.location.href='/courses'">Courses</button>
+  <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
+  <%if Helpers.logged_in?(session)%>
+  <button class ="button" onclick="window.location.href='/instructors/<%=Helpers.current_user(session).slug%>'">Profile</button>
+  <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
+  <%else%>
+  <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
+  <button class ="button" onclick="window.location.href='/signup'">Instructor Signup</button>
+  <%end%>
+  <div class="clear">
+  </div>
+  <h2><% if flash.has?(:message) %>
+    <%= flash[:message]%>
+  <% end %></h2>
+
+  <form action="/courses/<%=@course.slug%>" method="POST">
+    <input type="hidden" name="_method" value="patch">
+    <table>
+      <tr>
+        <td><label for="name">Course Name: </label></td>
+        <td><input type="text" name="course[name]" id="name" value = "<%=@course.name%>"></td>
+      </tr>
+      <tr>
+        <td><label for="course_length">Course Length (hours): </label></td>
+        <td><input type="text" name="course[course_length]" id="course_length" value="<%=@course.course_length%>"></td>
+      </tr>
+      <tr>
+        <td><label for="course_description">Description: </label></td>
+        <td><textarea rows="3" cols="30" name="course[course_description]" id="course_description"><%=@course.course_description%></textarea></td>
+      </tr>
+      <tr>
+          <td><label for="course_group_id">Course Group: </label></td>
+          <td><select style="font-size:18px;" id="course_group_id" name="course[course_group_id]" value="<%=@course.course_group%>">
+              <% @course_groups.each do |course_group| %>
+                <%if course_group == @course.course_group%>
+                  <option value="<%=course_group.id%>" selected><%=course_group.name%></option>
+                <%else%>
+                  <option value="<%=course_group.id%>"><%=course_group.name%></option>
+                <%end%>
+              <%end%>
+              </select>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="course_group_name">New Course Group</label>
+          </td>
+          <td><input type="text" name="course_group_name" id="course_group_name"></td>
+        </tr>
+    </table>
+
+  <p><strong>Please note:</strong> Course Name is required field.</p>
+
+  <label for="update_course"></label>
+  <input class="button" type="submit" value="Update" id ="update_course">
+</form>
+<form action="/courses/<%=@course.slug%>/delete" method="post">
+  <input type="hidden" name="_method" value="DELETE">
+  <input class = "button" type="submit" value="Delete">
+</form>
+
+
+</div>
