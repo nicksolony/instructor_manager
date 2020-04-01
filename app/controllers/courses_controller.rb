@@ -66,9 +66,25 @@ class CoursesController < ApplicationController
   end
 
   # PATCH: /courses/5
-  patch "/courses/:id" do
-    redirect "/courses/:id"
-  end
+  patch "/courses/:slug" do
+    @course = Course.find_by_slug(params[:slug])
+     if  @course.update(params[:course])
+       if !params[:course_group_name].empty?
+           new_course_group = CourseGroup.create(name: params[:course_group_name], creator_id: Helpers.current_user(session).id)
+           @course.course_group_id = new_course_group.id
+           @course.save
+       end
+       redirect "/courses/#{@course.slug}"
+     elsif @course.name==""
+
+         flash[:message] = "Course Name can't be blank"
+     else
+         flash[:message] = "Course with this name already exist"
+     end
+       redirect "/courses/#{params[:slug]}/edit"
+    end
+
+
 
   # DELETE: /courses/5/delete
   delete "/courses/:id/delete" do

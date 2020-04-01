@@ -76,7 +76,7 @@ class InstructorsController < ApplicationController
      if  @instructor.update(params[:instructor])
        redirect "/instructors/#{@instructor.slug}"
      else
-       redirect "/instructors/#{@instructor.slug}/edit"
+       redirect "/instructors/#{params[:slug]}/edit"
      end
   end
 
