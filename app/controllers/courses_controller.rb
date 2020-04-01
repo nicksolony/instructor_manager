@@ -37,6 +37,8 @@ class CoursesController < ApplicationController
         redirect to "/courses/#{@course.slug}"
       elsif @course.name==""
           flash[:message] = "Course Name can't be blank"
+      elsif CourseGroup.any? { |cg| cg.name==params[:course_group_name] }
+          flash[:message] = "Course Group with this name already exist"
       else
           flash[:message] = "Course with this name already exist"
       end
@@ -90,6 +92,7 @@ class CoursesController < ApplicationController
   delete "/courses/:slug/delete" do
     @course = Course.find_by_slug(params[:slug].to_s)
     @course.delete
-    redirect "/courses"
+    redirect "/instructors/#{Helpers.current_user(session).slug}"
   end
+
 end

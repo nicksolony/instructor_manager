@@ -105,5 +105,13 @@ class InstructorsController < ApplicationController
     end
   end
 
+  get "/instructors/:slug/delete_all_courses" do
+    @instructor = Instructor.find_by_slug(params[:slug].to_s)
+    if @instructor == Helpers.current_user(session)
+      @instructor.courses.each {|course| course.delete}
+    end
+    redirect "/instructors/#{@instructor.slug}"
+  end
+
 
 end
