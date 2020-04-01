@@ -47,7 +47,7 @@ class InstructorsController < ApplicationController
           @instructor.last_name==""
             flash[:message] = "Last Name can't be blank"
         else
-          flash[:message] = "Account with this username or email already exist"
+          flash[:message] = "Account with this username or email already exists"
         end
         redirect to '/instructors/new'
       end
@@ -87,7 +87,7 @@ class InstructorsController < ApplicationController
          @instructor.last_name==""
            flash[:message] = "Last Name can't be blank"
        else
-         flash[:message] = "Account with this username or email already exist"
+         flash[:message] = "Account with this username or email already exists"
        end
        redirect "/instructors/#{params[:slug]}/edit"
      end
@@ -105,7 +105,7 @@ class InstructorsController < ApplicationController
     end
   end
 
-  get "/instructors/:slug/delete_all_courses" do
+  delete "/instructors/:slug/delete_all_courses" do
     @instructor = Instructor.find_by_slug(params[:slug].to_s)
     if @instructor == Helpers.current_user(session)
       @instructor.courses.each {|course| course.delete}
