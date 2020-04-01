@@ -73,7 +73,7 @@
   <tr>
     <td width="50%"><ul>
       <table>
-        <%@instructor.course_groups.uniq.each do |course_group|%>
+        <%@instructor.course_groups.uniq.sort_by(&:name).each do |course_group|%>
         <tr><td width="70%"><a href="/course_groups/<%=course_group.slug%>"><%=course_group.name%></a></td>
           <% if Helpers.logged_in?(session) && course_group.creator_id == Helpers.current_user(session).id  && @instructor == Helpers.current_user(session)%>
           <td width="15%">
@@ -92,7 +92,7 @@
     </td>
     <td width="50%">
       <table>
-      <%@instructor.courses.each do |course|%>
+      <%@instructor.courses.sort_by(&:name).each do |course|%>
         <tr><td width="70%"><a href="/courses/<%=course.slug%>"><%=course.name%></a></td>
           <% if Helpers.logged_in?(session) && course.creator_id == Helpers.current_user(session).id && @instructor == Helpers.current_user(session)%>
           <td width="15%">

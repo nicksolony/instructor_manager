@@ -74,8 +74,9 @@ class InstructorsController < ApplicationController
 
   # PATCH: /instructors/5
   patch "/instructors/:slug" do
+
     @instructor = Instructor.find_by_slug(params[:slug])
-     if  @instructor.update(params[:instructor]) && EmailAddress.valid?(@instructor.email)
+      if  @instructor.update(params[:instructor]) && EmailAddress.valid?(@instructor.email)
        redirect "/instructors/#{@instructor.slug}"
      else
        if @instructor.name==""
@@ -103,7 +104,8 @@ class InstructorsController < ApplicationController
     redirect "/logout"
     else
       flash[:message] = "Can't delete Instructor, need to delete courses first"
-      redirect "/instructors/#{@instructor.slug}"
+      erb :"/instructors/show.html"
+      #redirect "/instructors/#{@instructor.slug}"
     end
   end
 

@@ -53,13 +53,15 @@
         </table>
     </h3>
     <p><strong>Please note:</strong> Username, email, password, First Name and Last Name are required fields.</p>
+    <p><strong>&#9734</strong> - created courses. They can't be removed in this view. Go to Instructor Profile or Course Page and Delete.</p>
     <h2>Edit Instructor Courses</h2>
   <table>
     <% @courses.each do |course|%>
     <tr>
     <td><label for="<%=course.slug%>"><%=course.name%></label></td>
-    <td><input type="checkbox" name="instructor[course_ids][]" value="<%=course.id%>" id="<%=course.slug%>" <%='checked' if @instructor.courses.include?(course)%>></td>
+    <td><input type="checkbox" name="instructor[course_ids][]" value="<%=course.id%>" id="<%=course.slug%>" <%='checked' if @instructor.courses.include?(course)%> <%='onclick="return false;" readonly' if course.creator_id == @instructor.id%>> <%="<strong>&#9734</strong>" if course.creator_id == @instructor.id %></td>
     <%end%>
+
     </tr>
     </table>
 
