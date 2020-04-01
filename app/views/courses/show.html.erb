@@ -51,7 +51,7 @@
       <%@course.instructors.each do |instructor|%>
         <li><a href="/instructors/<%=instructor.slug%>"><%=instructor.last_name%>, <%=instructor.first_name%></a>
           <% if @course_creator.id == Helpers.current_user(session).id && instructor == Helpers.current_user(session)%> -
-           <a href="/instructors/<%=instructor.slug%>/edit">Edit</a>
+           <strong>&#9734</strong>
            <%end%>
          </li>
 

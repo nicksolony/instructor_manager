@@ -13,26 +13,28 @@ class InstructorsController < ApplicationController
   # GET: /instructors/new
   get "/instructors/new" do
     @courses= Course.all.sort_by(&:name)
-    @course_groups=CourseGroup.all.uniq.sort_by(&:name)
+    @course_groups=CourseGroup.all.sort_by(&:name)
     erb :"/instructors/new.html"
   end
 
   # POST: /instructors
   post "/instructors" do
+
     @instructor=Instructor.new(params[:instructor])
       if EmailAddress.valid?(@instructor.email) && @instructor.save
         session[:user_id] = @instructor.id
         if !params[:course][:name].empty?
-          @course = Course.new(params[:course])
-          if !params[:course_group_name].empty?
-            new_course_group = CourseGroup.create(name: params[:course_group_name], creator_id: @instructor.id)
-            @course.course_group_id = new_course_group.id
-          end
+            @course = Course.new(params[:course])
+            if !params[:course_group_name].empty?
+              new_course_group = CourseGroup.create(name: params[:course_group_name], creator_id: @instructor.id)
+              @course.course_group_id = new_course_group.id
+            end
           @course.instructors << @instructor
           @course.creator_id=@instructor.id
           @course.save
         end
-        redirect to "/instructors/#{Helpers.current_user(session).slug}"
+        redirect to "/instructors/#{@instructor.slug}"
+        #redirect to "/instructors/#{Helpers.current_user(session).slug}"
       else
         if @instructor.name==""
           flash[:message] = "Username can't be blank"
@@ -108,7 +110,13 @@ class InstructorsController < ApplicationController
   delete "/instructors/:slug/delete_all_courses" do
     @instructor = Instructor.find_by_slug(params[:slug].to_s)
     if @instructor == Helpers.current_user(session)
-      @instructor.courses.each {|course| course.delete}
+      @instructor.courses.each do |course|
+        if course.creator_id == @instructor.id
+          course.delete
+        else
+          @instructor.courses.delete(course)
+        end
+      end
     end
     redirect "/instructors/#{@instructor.slug}"
   end
