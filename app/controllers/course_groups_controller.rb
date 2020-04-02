@@ -22,6 +22,7 @@ class CourseGroupsController < ApplicationController
 
   # POST: /course_groups
   post "/course_groups" do
+    binding.pry
     @instructor= Helpers.current_user(session)
     @course_group=CourseGroup.new(params[:course_group])
     @course_group.creator_id = @instructor.id
@@ -58,8 +59,16 @@ class CourseGroupsController < ApplicationController
   end
 
   # PATCH: /course_groups/5
-  patch "/course_groups/:id" do
-    redirect "/course_groups/:id"
+  patch "/course_groups/:slug" do
+    @course_group = CourseGroup.find_by_slug(params[:slug])
+     if  @course_group.update(params[:course_group])
+       redirect "/course_groups/#{@course_group.slug}"
+     elsif @course_group.name==""
+         flash[:message] = "Course Name can't be blank"
+     else
+         flash[:message] = "Course with this name already exists"
+     end
+       redirect "/courses/#{params[:slug]}/edit"
   end
 
   # DELETE: /course_groups/5/delete
