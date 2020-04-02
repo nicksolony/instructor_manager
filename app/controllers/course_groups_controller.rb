@@ -4,8 +4,10 @@ class CourseGroupsController < ApplicationController
   get "/course_groups" do
     if Helpers.logged_in?(session)
       @instructor= Helpers.current_user(session)
+      @instructor_courses=@instructor.course_groups
     end
     @course_groups=CourseGroup.all.sort_by(&:name)
+
     erb :"/course_groups/index.html"
   end
 

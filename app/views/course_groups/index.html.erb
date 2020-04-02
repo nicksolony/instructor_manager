@@ -12,13 +12,18 @@
 <%end%>
 <div class="clear">
 </div>
-<ol>
-  <% @course_groups.each do |course_group| %>
-    <li>
-      <a href="/course_groups/<%=course_group.slug%>"><%=course_group.name%> - <%=course_group.courses.count%></a>
-      <% if Helpers.logged_in?(session) && @instructor.course_groups.include?(course_group)%>
-      - <strong>&#9734</strong>
+<table>
+  <tr>
+    <th colspan="4">List of course groups</th>
+
+  </tr>
+  <% @course_groups.each_with_index do |course_group,i| %>
+    <tr>
+      <td><%=i+1%></td>
+      <td><a href="/course_groups/<%=course_group.slug%>"><%=course_group.name%></a></td>
+      <td><%=course_group.courses.count%></td>
+      <td><% if Helpers.logged_in?(session) && @instructor_courses.include?(course_group) || course_group.creator_id ==@instructor.id %><strong>&#9734</strong></td>
       <%end%>
-    </li>
+    </tr>
     <%end%>
-</ol>
+</table>
