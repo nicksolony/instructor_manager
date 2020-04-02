@@ -5,7 +5,7 @@
 <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
 <%if Helpers.logged_in?(session)%>
   <%if @course_group_creator == Helpers.current_user(session)%>
-    <button class ="button" onclick="window.location.href='/course_groups/<%=@course_group.slug%>/edit'">Edit Course Group</button>
+    <button class ="button" onclick="window.location.href='/course_groups/<%=@course_group.slug%>/edit'">Rename Group</button>
     <form action="/course_groups/<%=@course_group.slug%>/delete" method="post">
       <input type="hidden" name="_method" value="DELETE">
       <input class = "button" type="submit" value="Delete Group">

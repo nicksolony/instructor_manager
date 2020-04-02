@@ -6,10 +6,8 @@
   <button class ="button" onclick="window.location.href='/courses'">Courses</button>
   <button class ="button" onclick="window.location.href='/course_groups'">Course Groups</button>
   <%if Helpers.logged_in?(session)%>
-
-      <button class ="button" onclick="window.location.href='/instructors/<%=Helpers.current_user(session).slug%>'">Profile</button>
-
-  <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
+    <button class ="button" onclick="window.location.href='/instructors/<%=Helpers.current_user(session).slug%>'">Profile</button>
+    <button class ="button" onclick="window.location.href='/logout'">Log Out</button>
   <%else%>
   <button class ="button" onclick="window.location.href='/login'">Instructor Login</button>
   <button class ="button" onclick="window.location.href='/signup'">Instructor Signup</button>
