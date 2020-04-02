@@ -63,7 +63,7 @@ class CoursesController < ApplicationController
     if Helpers.current_user(session) == @course_creator
       erb :"/courses/edit.html"
     else
-      redirect to "/instructors/#{params[:slug]}"
+      redirect to "/courses/#{params[:slug]}"
     end
   end
 
