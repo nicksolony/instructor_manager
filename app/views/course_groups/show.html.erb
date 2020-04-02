@@ -47,11 +47,12 @@
     <tr>
       <td width="50%"><ul>
         <table>
-          <%@instructors.each do |instructor|%>
+          <%@instructors_all.each do |instructor|%>
+          <%if @course_group_creator==instructor || @course_group_instructors.include?(instructor) %>
           <tr><td ><a href="/instructors/<%=instructor.slug%>"><%=instructor.last_name%>, <%=instructor.first_name%></a> <% if Helpers.logged_in?(session) && instructor == Helpers.current_user(session)%> -
            <strong>&#9734</strong>
            <%end%></td>
-
+           <%end%>
           <%end%>
           </table>
       </td>

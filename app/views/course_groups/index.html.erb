@@ -22,7 +22,7 @@
       <td><%=i+1%></td>
       <td><a href="/course_groups/<%=course_group.slug%>"><%=course_group.name%></a></td>
       <td><%=course_group.courses.count%></td>
-      <td><% if Helpers.logged_in?(session) && @instructor_courses.include?(course_group) || course_group.creator_id ==@instructor.id %><strong>&#9734</strong></td>
+      <td><% if Helpers.logged_in?(session) && (@instructor_courses.include?(course_group) || course_group.creator_id ==@instructor.id) %><strong>&#9734</strong></td>
       <%end%>
     </tr>
     <%end%>

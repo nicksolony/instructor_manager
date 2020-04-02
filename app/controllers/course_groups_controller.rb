@@ -41,7 +41,8 @@ class CourseGroupsController < ApplicationController
   get "/course_groups/:slug" do
     @course_group = CourseGroup.find_by_slug(params[:slug].to_s)
     @course_group_creator = Instructor.find(@course_group.creator_id)
-    @instructors= @course_group.instructors.uniq.sort_by{|t| [t.last_name, t.first_name]}
+    @instructors_all= Instructor.all.sort_by{|t| [t.last_name, t.first_name]}
+    @course_group_instructors= @course_group.instructors.uniq.sort_by{|t| [t.last_name, t.first_name]}
     @course_group_courses = @course_group.courses.sort_by(&:name)
     erb :"/course_groups/show.html"
   end
