@@ -20,7 +20,9 @@
 
 <div class="clear">
 </div>
-
+<h2><% if flash.has?(:message) %>
+  <%= flash[:message]%>
+<% end %></h2>
 <h2>Course Group Overview</h2>
 <table>
   <tr>
@@ -40,19 +42,7 @@
   <table width="100%">
     <tr>
       <td width="50%"><h2>Instructors</h2></td>
-      <td width="50%">
-        <table>
-        <tr>
-          <td width="50%">
-
-        <h2>Courses</h2>
-          </td>
-        <%if Helpers.logged_in?(session)%>
-           <td width="25%"><button class ="button" onclick="window.location.href='/courses/new'">Add new course</button></td>
-          <%end%>
-          </tr>
-        </table>
-      </td>
+      <td width="50%"><h2>Courses</h2></td>
     </tr>
     <tr>
       <td width="50%"><ul>

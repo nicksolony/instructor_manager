@@ -73,24 +73,23 @@
   <tr>
     <td width="50%"><ul>
       <table>
-        <%@course_groups.each do |course_group|%>
-          <%if @created_course_groups.include?(course_group) || @instructor_course_groups.include?(course_group) %>
-            <tr>
-              <td width="70%"><a href="/course_groups/<%=course_group.slug%>"><%=course_group.name%></a></td>
-                <% if Helpers.logged_in?(session) && course_group.creator_id == Helpers.current_user(session).id  && @instructor == Helpers.current_user(session)%>
-                  <td width="15%"><button onclick="window.location.href='/course_groups/<%=course_group.slug%>/edit'">Edit</button></td>
-                  <td width="15%">
-                    <form action="/course_groups/<%=course_group.slug%>/delete" method="post">
-                      <input type="hidden" name="_method" value="DELETE">
-                      <input type="submit" value="Delete">
-                    </form>
-                  </td>
-                <%end%>
-              </td>
-            </tr>
-          <%end%>
+        <%@instructor_course_groups.each do |course_group|%>
+        <tr><td width="70%"><a href="/course_groups/<%=course_group.slug%>"><%=course_group.name%></a></td>
+          <% if Helpers.logged_in?(session) && course_group.creator_id == Helpers.current_user(session).id  && @instructor == Helpers.current_user(session)%>
+          <td width="15%">
+            <button onclick="window.location.href='/course_groups/<%=course_group.slug%>/edit'">Edit</button>
+          </td>
+          <td width="15%">
+            <form action="/course_groups/<%=course_group.slug%>/delete" method="post">
+              <input type="hidden" name="_method" value="DELETE">
+              <input type="submit" value="Delete">
+          </form>
+            </td>
+           </tr>
+           <%end%>
         <%end%>
-      </table>
+        </table>
+    </td>
     <td width="50%">
       <table>
       <%@instructor_courses.each do |course|%>

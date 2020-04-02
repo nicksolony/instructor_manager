@@ -58,6 +58,10 @@ class InstructorsController < ApplicationController
   # GET: /instructors/5
   get "/instructors/:slug" do
       @instructor = Instructor.find_by_slug(params[:slug].to_s)
+      @course_groups=CourseGroup.all.sort_by(&:name)
+      @created_course_groups=@course_groups.select { |e| e.creator_id==@instructor.id  }
+      @instructor_course_groups=@instructor.course_groups.uniq.sort_by(&:name)
+      @instructor_courses=@instructor.courses.sort_by(&:name)
       erb :"/instructors/show.html"
   end
 
@@ -99,13 +103,12 @@ class InstructorsController < ApplicationController
   # DELETE: /instructors/5/delete
   delete "/instructors/:slug/delete" do
     @instructor = Instructor.find_by_slug(params[:slug].to_s)
-    if !Course.any? { |e| e.creator_id==@instructor.id }
+    if !Course.any? { |e| e.creator_id==@instructor.id } || !CourseGroup.any? { |cg| cg.creator_id==@instructor.id }
     @instructor.delete
     redirect "/logout"
     else
-      flash[:message] = "Can't delete Instructor, need to delete courses first"
-      erb :"/instructors/show.html"
-      #redirect "/instructors/#{@instructor.slug}"
+      flash[:message] = "Can't delete Instructor, need to delete courses and course groups first"
+      redirect "/instructors/#{@instructor.slug}"
     end
   end
 

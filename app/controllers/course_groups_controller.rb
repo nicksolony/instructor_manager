@@ -22,7 +22,6 @@ class CourseGroupsController < ApplicationController
 
   # POST: /course_groups
   post "/course_groups" do
-    binding.pry
     @instructor= Helpers.current_user(session)
     @course_group=CourseGroup.new(params[:course_group])
     @course_group.creator_id = @instructor.id
@@ -61,6 +60,7 @@ class CourseGroupsController < ApplicationController
   # PATCH: /course_groups/5
   patch "/course_groups/:slug" do
     @course_group = CourseGroup.find_by_slug(params[:slug])
+    @course_group_creator = Instructor.find(@course_group.creator_id)
      if  @course_group.update(params[:course_group])
        redirect "/course_groups/#{@course_group.slug}"
      elsif @course_group.name==""
@@ -72,7 +72,15 @@ class CourseGroupsController < ApplicationController
   end
 
   # DELETE: /course_groups/5/delete
-  delete "/course_groups/:id/delete" do
+  delete "/course_groups/:slug/delete" do
+
+    @course_group = CourseGroup.find_by_slug(params[:slug].to_s)
+    if !Course.any? { |e| e.course_group==@course_group }
+    @course_group.delete
     redirect "/course_groups"
+    else
+      flash[:message] = "Can't delete Course Group, need to delete courses first"
+      redirect "/course_groups/#{@course_group.slug}"
+    end
   end
 end
