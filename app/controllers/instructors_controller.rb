@@ -30,8 +30,12 @@ class InstructorsController < ApplicationController
         if !params[:course][:name].empty?
             @course = Course.new(params[:course])
             if !params[:course_group_name].empty?
-              new_course_group = CourseGroup.create(name: params[:course_group_name], creator_id: @instructor.id)
-                @course.course_group_id = new_course_group.id
+              new_course_group = CourseGroup.new(name: params[:course_group_name], creator_id: @instructor.id)
+                if new_course_group.save
+                  @course.course_group_id = new_course_group.id
+                else
+                  flash[:message] = "Course wasn't created duplicate course group name"
+                end
             end
           @course.instructors << @instructor
           @course.creator_id=@instructor.id
