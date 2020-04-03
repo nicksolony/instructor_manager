@@ -5,7 +5,6 @@ class CourseGroup < ActiveRecord::Base
   extend Slugify::ClassMethods
 
   has_many :courses
-  belongs_to :instructor
   has_many :instructors, through: :courses
 
 end
