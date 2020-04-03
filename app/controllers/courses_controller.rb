@@ -78,7 +78,6 @@ class CoursesController < ApplicationController
        end
        redirect "/courses/#{@course.slug}"
      elsif @course.name==""
-
          flash[:message] = "Course Name can't be blank"
      else
          flash[:message] = "Course with this name already exists"

@@ -12,14 +12,18 @@ class InstructorsController < ApplicationController
 
   # GET: /instructors/new
   get "/instructors/new" do
-    @courses= Course.all.sort_by(&:name)
-    @course_groups=CourseGroup.all.sort_by(&:name)
-    erb :"/instructors/new.html"
+    if !Helpers.logged_in?(session)
+      @courses= Course.all.sort_by(&:name)
+      @course_groups=CourseGroup.all.sort_by(&:name)
+      erb :"/instructors/new.html"
+    else
+      @instructor= Helpers.current_user(session)
+      redirect "/instructors/#{@instructor.slug}"
+    end
   end
 
   # POST: /instructors
   post "/instructors" do
-
     @instructor=Instructor.new(params[:instructor])
       if EmailAddress.valid?(@instructor.email) && @instructor.save
         session[:user_id] = @instructor.id
@@ -27,7 +31,7 @@ class InstructorsController < ApplicationController
             @course = Course.new(params[:course])
             if !params[:course_group_name].empty?
               new_course_group = CourseGroup.create(name: params[:course_group_name], creator_id: @instructor.id)
-              @course.course_group_id = new_course_group.id
+                @course.course_group_id = new_course_group.id
             end
           @course.instructors << @instructor
           @course.creator_id=@instructor.id
@@ -35,23 +39,20 @@ class InstructorsController < ApplicationController
         end
         redirect to "/instructors/#{@instructor.slug}"
         #redirect to "/instructors/#{Helpers.current_user(session).slug}"
-      elsif @instructor.name==""
-          flash[:message] = "Username can't be blank"
       elsif !EmailAddress.valid?(@instructor.email)
           flash[:message] = "Please add valid email address"
+      elsif @instructor.name==""
+          flash[:message] = "Username can't be blank"
       elsif @instructor.password_digest==nil
           flash[:message] = "Password can't be blank"
-      elsif
-          @instructor.first_name==""
+      elsif @instructor.first_name==""
             flash[:message] = "First Name can't be blank"
-      elsif
-          @instructor.last_name==""
+      elsif @instructor.last_name==""
             flash[:message] = "Last Name can't be blank"
       else
           flash[:message] = "Account with this username or email already exists"
       end
-        redirect to '/instructors/new'
-
+        redirect '/instructors/new'
   end
 
   # GET: /instructors/5
@@ -77,7 +78,6 @@ class InstructorsController < ApplicationController
 
   # PATCH: /instructors/5
   patch "/instructors/:slug" do
-
     @instructor = Instructor.find_by_slug(params[:slug])
       if  @instructor.update(params[:instructor]) && EmailAddress.valid?(@instructor.email)
         redirect "/instructors/#{@instructor.slug}"
