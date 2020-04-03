@@ -35,24 +35,23 @@ class InstructorsController < ApplicationController
         end
         redirect to "/instructors/#{@instructor.slug}"
         #redirect to "/instructors/#{Helpers.current_user(session).slug}"
-      else
-        if @instructor.name==""
+      elsif @instructor.name==""
           flash[:message] = "Username can't be blank"
-        elsif !EmailAddress.valid?(@instructor.email)
+      elsif !EmailAddress.valid?(@instructor.email)
           flash[:message] = "Please add valid email address"
-        elsif @instructor.password_digest==nil
+      elsif @instructor.password_digest==nil
           flash[:message] = "Password can't be blank"
-        elsif
+      elsif
           @instructor.first_name==""
             flash[:message] = "First Name can't be blank"
-        elsif
+      elsif
           @instructor.last_name==""
             flash[:message] = "Last Name can't be blank"
-        else
+      else
           flash[:message] = "Account with this username or email already exists"
-        end
-        redirect to '/instructors/new'
       end
+        redirect to '/instructors/new'
+
   end
 
   # GET: /instructors/5
@@ -81,9 +80,8 @@ class InstructorsController < ApplicationController
 
     @instructor = Instructor.find_by_slug(params[:slug])
       if  @instructor.update(params[:instructor]) && EmailAddress.valid?(@instructor.email)
-       redirect "/instructors/#{@instructor.slug}"
-     else
-       if @instructor.name==""
+        redirect "/instructors/#{@instructor.slug}"
+      elsif @instructor.name==""
          flash[:message] = "Username can't be blank"
        elsif !EmailAddress.valid?(@instructor.email)
          flash[:message] = "Please add valid email address"
@@ -97,7 +95,6 @@ class InstructorsController < ApplicationController
          flash[:message] = "Account with this username or email already exists"
        end
        redirect "/instructors/#{params[:slug]}/edit"
-     end
   end
 
   # DELETE: /instructors/5/delete
