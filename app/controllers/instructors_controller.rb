@@ -52,7 +52,10 @@ class InstructorsController < ApplicationController
       else
           flash[:message] = "Account with this username or email already exists"
       end
-        redirect '/instructors/new'
+        @courses= Course.all.sort_by(&:name)
+        @course_groups=CourseGroup.all.sort_by(&:name)
+        erb :'/instructors/new.html'
+        #redirect '/instructors/new'
   end
 
   # GET: /instructors/5
