@@ -1,6 +1,6 @@
 # Instructor Manager
 
-This app will provide an access to instructors database and ability to manage it.
+This app will provide access to instructors' database and the ability to manage them.
 
 ## Installation
 
